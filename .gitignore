@@ -1,13 +1,13 @@
 .env
 
-plan.txt
-records.txt
-algorithm.txt
+plan
+records
+algorithm
 
-eslintrc.cjs
+eslintrc
 
-row_query.sql
+row_query
 
-test.js
+test
 
 node_modules/
