@@ -1,0 +1,51 @@
+ if (action === 2) {
+      
+      const lastDriver = matchCityAndCapacity[matchCityAndCapacity.length - 1]
+
+      for (let driver of matchCityAndCapacites) {
+
+        // console.log('driver Id : ',driver.User.id)
+        if (driver.User.id === driver_id) {
+          
+          const nextDriverIndex = matchCityAndCapacites.indexOf(driver) //
+
+          if (nextDriverIndex === -1) {
+            //
+            return res.status(400).json({
+              MESSAGES: 'Driver not found in the list.',
+            })
+          }
+
+          const nextDriver =
+            driver === lastDriver ? null : matchCityAndCapacites[
+              (matchCityAndCapacites.indexOf(driver) + 1) %
+                    matchCityAndCapacites.length
+            ]
+            
+          // console.log('next driver', nextDriver.User.id)
+          if (nextDriver === 2) {
+            return res.status(400).json({
+              MESSAGE: ' ',
+            })
+          }
+           
+          try {
+            if (nextDriver) {
+              await SlotBooking.update(
+                {
+                  driverId: nextDriver.User.id,
+                  status: 0,
+                },
+                {
+                  where: {
+                    id: booking_id,
+                  },
+                }
+              )
+            }             
+          } catch (err) {
+            console.log('not update: ', err)
+          }
+        }
+      }
+    }

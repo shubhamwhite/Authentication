@@ -1,0 +1,155 @@
+[
+    {
+      "userId": 3,
+      "pickupDateTime": "2023-09-27 10:00 AM",
+      "city": "Ahmedabad",
+      "source": "Area1",
+      "destination": "Area2",
+      "capacity": 1000
+    },
+    {
+      "userId": 5,
+      "pickupDateTime": "2023-09-28 02:30 PM",
+      "city": "Surat",
+      "source": "Area3",
+      "destination": "Area4",
+      "capacity": 1500
+    },
+    {
+      "userId": 7,
+      "pickupDateTime": "2023-09-29 09:15 AM",
+      "city": "Vadodara",
+      "source": "Area5",
+      "destination": "Area6",
+      "capacity": 2000
+    },
+    {
+      "userId": 10,
+      "pickupDateTime": "2023-09-30 04:45 PM",
+      "city": "Rajkot",
+      "source": "Area7",
+      "destination": "Area8",
+      "capacity": 2500
+    },
+    {
+      "userId": 13,
+      "pickupDateTime": "2023-10-01 11:30 AM",
+      "city": "Bhavnagar",
+      "source": "Area9",
+      "destination": "Area10",
+      "capacity": 3000
+    },
+    {
+      "userId": 16,
+      "pickupDateTime": "2023-10-02 03:20 PM",
+      "city": "Jamnagar",
+      "source": "Area11",
+      "destination": "Area12",
+      "capacity": 3500
+    },
+    {
+      "userId": 19,
+      "pickupDateTime": "2023-10-03 08:45 AM",
+      "city": "Gandhinagar",
+      "source": "Area13",
+      "destination": "Area14",
+      "capacity": 4000
+    },
+    {
+      "userId": 22,
+      "pickupDateTime": "2023-10-04 01:10 PM",
+      "city": "Junagadh",
+      "source": "Area15",
+      "destination": "Area16",
+      "capacity": 4500
+    },
+    {
+      "userId": 25,
+      "pickupDateTime": "2023-10-05 07:55 AM",
+      "city": "Ahmedabad",
+      "source": "Area17",
+      "destination": "Area18",
+      "capacity": 5000
+    },
+    {
+      "userId": 29,
+      "pickupDateTime": "2023-10-06 02:40 PM",
+      "city": "Surat",
+      "source": "Area19",
+      "destination": "Area20",
+      "capacity": 5500
+    },
+    {
+      "userId": 31,
+      "pickupDateTime": "2023-10-07 09:25 AM",
+      "city": "Vadodara",
+      "source": "Area21",
+      "destination": "Area22",
+      "capacity": 6000
+    },
+    {
+      "userId": 33,
+      "pickupDateTime": "2023-10-08 04:15 PM",
+      "city": "Rajkot",
+      "source": "Area23",
+      "destination": "Area24",
+      "capacity": 6500
+    },
+    {
+      "userId": 36,
+      "pickupDateTime": "2023-10-09 11:00 AM",
+      "city": "Bhavnagar",
+      "source": "Area25",
+      "destination": "Area26",
+      "capacity": 7000
+    },
+    {
+      "userId": 42,
+      "pickupDateTime": "2023-10-10 03:50 PM",
+      "city": "Jamnagar",
+      "source": "Area27",
+      "destination": "Area28",
+      "capacity": 1500
+    },
+    {
+      "userId": 44,
+      "pickupDateTime": "2023-10-11 08:35 AM",
+      "city": "Gandhinagar",
+      "source": "Area29",
+      "destination": "Area30",
+      "capacity": 2000
+    },
+    {
+      "userId": 46,
+      "pickupDateTime": "2023-10-12 01:25 PM",
+      "city": "Junagadh",
+      "source": "Area31",
+      "destination": "Area32",
+      "capacity": 2500
+    },
+    {
+      "userId": 49,
+      "pickupDateTime": "2023-10-13 07:10 AM",
+      "city": "Ahmedabad",
+      "source": "Area33",
+      "destination": "Area34",
+      "capacity": 3000
+    },
+    {
+      "userId": 53,
+      "pickupDateTime": "2023-10-14 02:00 PM",
+      "city": "Surat",
+      "source": "Area35",
+      "destination": "Area36",
+      "capacity": 3500
+    },
+    {
+      "userId": 58,
+      "pickupDateTime": "2023-10-15 09:45 AM",
+      "city": "Vadodara",
+      "source": "Area37",
+      "destination": "Area38",
+      "capacity": 4000
+    }
+  ]
+  
