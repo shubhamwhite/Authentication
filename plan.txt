@@ -34,7 +34,7 @@
       [-] display all upcoming records 
    - previous records show 
       [-] check admin is existed or not.
-      [-] display all previous records 
+      [-] display all previous records.
 
 
 

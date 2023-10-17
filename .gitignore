@@ -5,7 +5,7 @@
 /node_modules
 
 # other
-*.txt
+/*.txt
 
 # sql file
 /row_query.sql
@@ -15,4 +15,4 @@
 /test
 
 # vscode folder
-/.vscode
+/.vscode 
