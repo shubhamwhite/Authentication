@@ -3,3 +3,16 @@
 
 # dependencies
 /node_modules
+
+# other
+*.txt
+
+# sql file
+/row_query.sql
+
+# test file folders
+/test.js
+/test
+
+# vscode folder
+/.vscode
