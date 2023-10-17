@@ -5,6 +5,7 @@ import User from '../../models/user.js'
 import VehicleInformation from '../../models/vehicleInfo.js'
 
 const upcoming = async (req, res) => {
+  
   try {
     const { id } = req.body
     
@@ -84,8 +85,7 @@ const upcoming = async (req, res) => {
        
   } catch (err) {
     console.log(err)
-    return res.status(RESPONSE.HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({
-      MESSAGE : RESPONSE.MESSAGES.INTERNAL_SERVER_ERROR 
+    return res.status(RESPONSE.HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({ MESSAGE : RESPONSE.MESSAGES.INTERNAL_SERVER_ERROR 
     })
   }
   

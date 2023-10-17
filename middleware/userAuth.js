@@ -20,7 +20,7 @@ const verifyToken = (req, res, next) => {
   const split_token = token.split(' ') 
   const tokenOne = split_token[1]
 
-  if (!tokenOne) {
+  if (!tokenOne) { 
     return res.status(response.HTTP_STATUS_CODES.UNAUTHORIZED).json({ message: response.MESSAGES.UNAUTHORIZED_USER })
   }
   try {

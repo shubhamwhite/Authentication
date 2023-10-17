@@ -1,9 +1,9 @@
-import User from '../../models/user.js'
 import RESPONSE from '../../constant/response.js'
-import bcrypt from 'bcrypt'
 import Sequelize from 'sequelize'
+import User from '../../models/user.js'
+import bcrypt from 'bcrypt'
 import { generateToken } from '../../middleware/userAuth.js'
-          
+
 // registration api
 const registration = async (req, res) => {
   try {
@@ -73,7 +73,21 @@ const login = async (req, res) => {
   try {
     // getting data from body
     const { type, email, gmail_id, password } = req.body
-
+    console.log(email, gmail_id)  
+    
+    const ifCheck = await User.findAll({
+      where: {
+        block: 1,
+        ...(email && { email: email }),
+        ...(gmail_id && { gmail_id: gmail_id })
+      }
+    })
+    
+    // check user block or not
+    if (ifCheck.length >= 1) {
+      return res.status(RESPONSE.HTTP_STATUS_CODES.BAD_REQUEST).json({ MESSAGES : RESPONSE.MESSAGES.BAD_REQUEST })
+    }
+    
     let user
     // type check email or gmail_id
     if (type === 'email') {

@@ -1,7 +1,7 @@
 import { login, registration } from './registrationAndLogin/userController.js'
 
 import { actionRequest } from './vehicleInformation/action.js'
-import { blockUser } from './adminInformation/block.js'
+import { blockUser } from './adminInformation/blockUnblock.js'
 import { deleteSlot } from './bookingSlot/deleteSlot.js'
 import { displayAll } from './adminInformation/display.js'
 import { notification } from './vehicleInformation/notification.js'

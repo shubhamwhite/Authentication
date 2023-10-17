@@ -2,11 +2,13 @@ import RESPONSE from '../../constant/response.js'
 import User from '../../models/user.js'
 
 const blockUser = async (req,res) => {
+  
   try {
     const { admin_id, user_id, status } = req.body
     
-    // type conversion of status
+    // type conversion of status (number)
     const statusOf = +status
+    const userOf = +user_id
     
     // if check admin is login or not
     const ifExist = await User.findOne({
@@ -19,9 +21,14 @@ const blockUser = async (req,res) => {
     if (ifExist <= 0) {
       return res.status(RESPONSE.HTTP_STATUS_CODES.NOT_FOUND).json({ MESSAGE : RESPONSE.MESSAGES.NOT_FOUND })
     }
+  
+    // not self block 
+    if (userOf === 6) {
+      return res.status(RESPONSE.HTTP_STATUS_CODES.BAD_REQUEST).json({ MESSAGE : RESPONSE.MESSAGES.BAD_REQUEST })
+    }
     
     // block User
-    if (statusOf === 1) {
+    if (statusOf === RESPONSE.MESSAGES.general.FLAGES.BLOCK) {
       const blockedUser = await User.update(
         {
           block : status
@@ -38,7 +45,7 @@ const blockUser = async (req,res) => {
     }
 
     // unblock User
-    if (statusOf === 0) {
+    if (statusOf === RESPONSE.MESSAGES.general.FLAGES.UNBLOCK) {
       const blockedUser = await User.update(
         {
           block : null
