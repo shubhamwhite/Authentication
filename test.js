@@ -19,7 +19,7 @@ const VehicleInformation = sequelize.define('VehicleInformation', {
   },
   city: {
     type: DataTypes.STRING,
-  },
+  }
 })
 
 const User = sequelize.define('User', {
