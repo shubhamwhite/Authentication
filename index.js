@@ -9,7 +9,7 @@ import vehicleInformation from './models/vehicleInfo.js'
 
 const app = express()
 dotenv.config() 
-
+  
 // getting data json and urlencoded
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
@@ -20,13 +20,12 @@ const PORT = process.env.PORT || 3001
 app.use('/api/v1',router)  
   
 // sync database   
-User.sync({ force: false })     
+User.sync({ force: false })      
 vehicleInformation.sync({ force :  false })      
 slotBooking.sync({ force: false })
     
 // create server 
 app.listen(PORT,(err) => { 
-  
   checkDBConnection() 
   if (err) {
     console.log(color.bgRed(` server not run on ${PORT} port number `),err)

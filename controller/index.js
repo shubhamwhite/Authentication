@@ -1,16 +1,18 @@
 import { login, registration } from './registrationAndLogin/userController.js'
-import { vehicleInformations } from './vehicleInformation/vehicleinformation.js'
+
+import { actionRequest } from './vehicleInformation/action.js'
+import { blockUser } from './adminInformation/block.js'
+import { deleteSlot } from './bookingSlot/deleteSlot.js'
+import { displayAll } from './adminInformation/display.js'
+import { notification } from './vehicleInformation/notification.js'
+import { previous } from './adminInformation/previous.js'
+import { slotInformation } from './bookingSlot/bookingSlot.js'
+import { status } from './bookingSlot/status.js'
+import { upcoming } from './adminInformation/upcoming.js'
+import { updateSlot } from './bookingSlot/updateSlot.js'
 import { vehicleInfoUpdate } from './vehicleInformation/vehicleInfoUpdate.js'
 import { vehicleInfodelete } from './vehicleInformation/vehicleInfoDelete.js'
-import { slotInformation } from './bookingSlot/bookingSlot.js'
-import { updateSlot } from './bookingSlot/updateSlot.js'
-import { deleteSlot } from './bookingSlot/deleteSlot.js'
-import { notification } from './vehicleInformation/notification.js'
-import { actionRequest } from './vehicleInformation/action.js'
-import { status } from './bookingSlot/status.js'
-import { displayAll } from './adminInformation/display.js'
-import { previous } from './adminInformation/previous.js'
-import { upcoming } from './adminInformation/upcoming.js'
+import { vehicleInformations } from './vehicleInformation/vehicleinformation.js'
 
 export {
   login,
@@ -26,5 +28,6 @@ export {
   status,
   displayAll,
   previous,
-  upcoming
+  upcoming,
+  blockUser
 }

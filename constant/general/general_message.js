@@ -6,5 +6,6 @@ export default {
     PENDING : 0,
     ACCEPT : 1,
     REJECT : 2,
+    BLOCK : 3
   }
 } 

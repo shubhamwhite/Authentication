@@ -48,10 +48,13 @@ const User = sequelize.define('User', {
   role: {
     type: DataTypes.STRING,
     allowNull: false
+  },
+  block : {
+    type: DataTypes.TINYINT,
+    allowNull: true
   }
 },{
   timestamps: false,
 })
-
 
 export default User
