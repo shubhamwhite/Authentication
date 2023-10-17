@@ -5,14 +5,14 @@
 /node_modules
 
 # other
-*.txt/
+*.txt
 
 # sql file
-row_query.sql/
+row_query.sql
 
 # test file folders
-test.js/
-test/
-
+test.js
+test
+ 
 # vscode folder
-.vscode/ 
+.vscode
