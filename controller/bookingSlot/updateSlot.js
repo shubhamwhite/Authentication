@@ -1,18 +1,31 @@
 import { Op } from 'sequelize'
 import RESPONSE from '../../constant/response.js'
-import bookingSlotTable from '../../models/slotBooking.js'
+import SlotBooking from '../../models/slotBooking.js'
+import User from '../../models/user.js'
+import VehicleInformation from '../../models/vehicleInfo.js'
 import isDateTimeValid from '../../helper/pickupDate.js'
-import userTable from '../../models/user.js'
-import vehicleinfoTable from '../../models/vehicleInfo.js'
 
 const updateSlot = async (req, res) => {
+  
   try {
     
     const { id, startDate, endDate, city, source, destination, capacity } = req.body
 
-    const user = await userTable.findOne({ 
+    const ifCheck = await User.findAll({
+      where: {
+        block: 1,
+        id : id
+      }
+    })
+    
+    // check user block or not
+    if (ifCheck.length >= 1) {
+      return res.status(RESPONSE.HTTP_STATUS_CODES.BAD_REQUEST).json({ MESSAGE : RESPONSE.MESSAGES.BAD_REQUEST })
+    }
+
+    const user = await User.findOne({ 
       include: [{
-        model : bookingSlotTable,
+        model : SlotBooking,
         where : {
           userId : id
         }
@@ -52,10 +65,10 @@ const updateSlot = async (req, res) => {
     
 
     // Match data for vehicle information to user create area
-    const matchCityAndCapacity = await vehicleinfoTable.findAll({
+    const matchCityAndCapacity = await VehicleInformation.findAll({
       include: [
         {
-          model: userTable,
+          model: User,
           attributes: ['id', 'fName', 'lName', 'email', 'role'],
         },
       ],
@@ -81,7 +94,7 @@ const updateSlot = async (req, res) => {
     }
 
     // If existed date in that case not consider self date
-    const dateChecker = await bookingSlotTable.findAll({
+    const dateChecker = await SlotBooking.findAll({
       where: {
         userId: {
           [Op.notIn] : [id]
@@ -136,7 +149,7 @@ const updateSlot = async (req, res) => {
     }
 
     // In this case pass id and and update specific data
-    const updateSuccessful = await bookingSlotTable.update(userUpdate, {
+    const updateSuccessful = await SlotBooking.update(userUpdate, {
       where: {
         userId: id,
       },

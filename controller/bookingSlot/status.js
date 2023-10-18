@@ -1,13 +1,26 @@
-// User side notification
-import User from '../../models/user.js'
-import SlotBooking from '../../models/slotBooking.js'
-import VehicleInformation from '../../models/vehicleInfo.js'
 import RESPONSE from '../../constant/response.js'
+import SlotBooking from '../../models/slotBooking.js'
+import User from '../../models/user.js'
+import VehicleInformation from '../../models/vehicleInfo.js'
 
 const status = async (req, res) => {
   try {
     
-    const { id } = req.body
+    const { id } = req.body    
+
+    
+    const ifCheck = await User.findAll({
+      where: {
+        block: 1,
+        id : id
+      }
+    })
+    
+    // check user block or not
+    if (ifCheck.length >= 1) {
+      return res.status(RESPONSE.HTTP_STATUS_CODES.BAD_REQUEST).json({ MESSAGE : RESPONSE.MESSAGES.BAD_REQUEST })
+    }
+    
     
     // If existed and they user or not
     const ifExisted = await User.findOne({
@@ -19,7 +32,7 @@ const status = async (req, res) => {
 
     if (!ifExisted) {
       return res.status(RESPONSE.HTTP_STATUS_CODES.NOT_FOUND).json({
-        MESSEGE : RESPONSE.MESSAGES.NOT_FOUND
+        MESSAGE : RESPONSE.MESSAGES.NOT_FOUND
       })
     }
     
@@ -31,7 +44,7 @@ const status = async (req, res) => {
     })
     if (!ifSlotBookingExistOrNot) {
       return res.status(RESPONSE.HTTP_STATUS_CODES.NOT_FOUND).json({
-        MESSEGE : RESPONSE.MESSAGES.NOT_FOUND
+        MESSAGE : RESPONSE.MESSAGES.NOT_FOUND
       })
     }
     

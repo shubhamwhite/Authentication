@@ -1,8 +1,8 @@
 import { Op } from 'sequelize'
 import RESPONSE from '../../constant/response.js'
+import User from '../../models/user.js'
 import bookingSlotTable from '../../models/slotBooking.js'
 import isDateTimeValid from '../../helper/pickupDate.js'
-import userTable from '../../models/user.js'
 import vehicleinfoTable from '../../models/vehicleInfo.js'
 
 const slotInformation = async (req, res) => {
@@ -10,7 +10,20 @@ const slotInformation = async (req, res) => {
     
     const { id, startDate, endDate, city, source, destination, capacity } = req.body
 
-    const user = await userTable.findOne({ where: { id, role: 'user' } })
+    const ifCheck = await User.findAll({
+      where: {
+        block: 1,
+        id : id
+      }
+    })
+    console.log(typeof ifCheck)
+    
+    // check user block or not
+    if (ifCheck.length >= 1) {
+      return res.status(RESPONSE.HTTP_STATUS_CODES.BAD_REQUEST).json({ MESSAGES : RESPONSE.MESSAGES.BAD_REQUEST })
+    }
+    
+    const user = await User.findOne({ where: { id, role: 'user' } })
     
     // Check if the user exists and has the 'user' role
     if (!user) {
@@ -58,7 +71,7 @@ const slotInformation = async (req, res) => {
     const matchCityAndCapacity = await vehicleinfoTable.findAll({
       include: [
         {
-          model: userTable, 
+          model: User, 
           attributes: ['id', 'fName', 'lName', 'email', 'role'],
         },
       ],

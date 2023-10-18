@@ -10,7 +10,7 @@ const secretKey = process.env.JWT_SECRET
 
 // Middleware to generate a JWT token
 const generateToken = (user) => {
-  return jwt.sign({ userId: user.id }, secretKey, { expiresIn: '1h' }) 
+  return jwt.sign({ userId: user.id }, secretKey, { expiresIn: '23h' }) 
 }
  
 // Middleware to verify JWT token

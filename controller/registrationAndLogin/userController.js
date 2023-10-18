@@ -28,7 +28,7 @@ const registration = async (req, res) => {
     if (ifExistingUser) {
       return res
         .status(RESPONSE.HTTP_STATUS_CODES.CONFLICT)
-        .json({ message: RESPONSE.MESSAGES.CONFLIT.USER_ALREADY_EXISTED })
+        .json({ MESSAGES: RESPONSE.MESSAGES.CONFLIT.USER_ALREADY_EXISTED })
     }
 
     // password hashing
@@ -56,7 +56,7 @@ const registration = async (req, res) => {
     res
       .status(RESPONSE.HTTP_STATUS_CODES.CREATED)
       .json({ 
-        message: RESPONSE.MESSAGES.USER_CREATED,
+        MESSAGES: RESPONSE.MESSAGES.USER_CREATED,
         UserId: user,
         token: token,
       })
@@ -64,7 +64,7 @@ const registration = async (req, res) => {
     console.log(error) 
     res
       .status(RESPONSE.HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR)
-      .json({ message: RESPONSE.MESSAGES.INTERNAL_SERVER_ERROR })
+      .json({ MESSAGES: RESPONSE.MESSAGES.INTERNAL_SERVER_ERROR })
   }
 }
 
@@ -82,6 +82,7 @@ const login = async (req, res) => {
         ...(gmail_id && { gmail_id: gmail_id })
       }
     })
+    console.log(typeof ifCheck)
     
     // check user block or not
     if (ifCheck.length >= 1) {
@@ -97,14 +98,14 @@ const login = async (req, res) => {
     } else {
       return res  
         .status(RESPONSE.HTTP_STATUS_CODES.BAD_REQUEST)
-        .json({ message: RESPONSE.MESSAGES.INVALID_LOGIN_TYPE })
+        .json({ MESSAGES: RESPONSE.MESSAGES.INVALID_LOGIN_TYPE })
     }
 
     // is not gmail id or email
     if (!user) {
       return res
         .status(RESPONSE.HTTP_STATUS_CODES.UNAUTHORIZED)
-        .json({ message: RESPONSE.MESSAGES.UNAUTHORIZED_USER })
+        .json({ MESSAGES: RESPONSE.MESSAGES.UNAUTHORIZED_USER })
     }
 
     // bcrypt matching like (password === user.password) 
@@ -114,18 +115,18 @@ const login = async (req, res) => {
     if (passwordMatch) { 
       const token = generateToken(user)
       res.status(RESPONSE.HTTP_STATUS_CODES.OK).json({
-        message: RESPONSE.MESSAGES.OK,
+        MESSAGES: RESPONSE.MESSAGES.OK,
         user: user,
         token: token,
       }) 
     } else {
       return res
         .status(RESPONSE.HTTP_STATUS_CODES.UNAUTHORIZED)
-        .json({ message: RESPONSE.MESSAGES.UNAUTHORIZED_USER })
+        .json({ MESSAGES: RESPONSE.MESSAGES.UNAUTHORIZED_USER })
     }
   } catch (error) {
     console.error(error)
-    res.status(500).json({ message: RESPONSE.MESSAGES.INTERNAL_SERVER_ERROR })
+    res.status(500).json({ MESSAGES: RESPONSE.MESSAGES.INTERNAL_SERVER_ERROR })
   }
 }
 

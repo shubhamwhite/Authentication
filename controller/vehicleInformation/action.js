@@ -148,7 +148,6 @@ const actionRequest = async (req, res) => {
     }
     
     if (updateAction) {
-      console.table('send Action successfully ')
       return res.status(400).json({
         MESSAGE: 'send Action successfully ',
       })
