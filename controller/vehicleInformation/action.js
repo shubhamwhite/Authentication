@@ -9,6 +9,9 @@ let matchCityAndCapacites = []
 const actionRequest = async (req, res) => {
   try {
     const { driver_id, booking_id, action } = req.body
+
+
+    
     const ifExist = await User.findOne({
       where: {
         id: driver_id,
@@ -18,7 +21,7 @@ const actionRequest = async (req, res) => {
 
     // Check if not existed
     if (!ifExist) {
-      console.log('driver is not available in User table')
+      console.log('driver is not available in User table') 
       return res.status(RESPONSE.HTTP_STATUS_CODES.NOT_FOUND).json({
         MESSAGE: RESPONSE.MESSAGES.NOT_FOUND,
       })

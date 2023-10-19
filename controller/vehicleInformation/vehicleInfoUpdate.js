@@ -1,13 +1,14 @@
-import vehicleInfo from '../../models/vehicleInfo.js'
-import User from '../../models/user.js'
+import { Op } from 'sequelize'
 import RESPONSE from '../../constant/response.js'
+import User from '../../models/user.js'
+import vehicleInfo from '../../models/vehicleInfo.js'
 
 // vehicle information update
 const vehicleInfoUpdate = async (req,res) => {
   try {
     // Get data from the request body
     const { id, capacity, vehicleName, vehicleNumber, city } = req.body
-    
+
     // Check if the user exists and has the 'driver' role
     const user = await User.findOne({ where: { id, role: 'driver' } })
     
@@ -24,31 +25,36 @@ const vehicleInfoUpdate = async (req,res) => {
       return res.status(RESPONSE.HTTP_STATUS_CODES.FORBIDDEN).json({ message: `Capacity in must be number format, ${RESPONSE.MESSAGES.FORBIDDEN}` })
     } 
 
-
     // user id is existed or not
     const existingVehicleInfo = await vehicleInfo.findOne({
-      where: {
+      where: { 
         userId: id,
       },
-    })
+    }) 
 
-    if (!existingVehicleInfo) {
+    if (!existingVehicleInfo) { 
       return res.status(RESPONSE.HTTP_STATUS_CODES.NOT_FOUND).json({
         message: RESPONSE.MESSAGES.NOT_FOUND,
       })
     }
 
     // check vehicle number is existed or not 
-    const vehicleNumberExisted = await vehicleInfo.findOne({
+    const vehicleNumberExisted = await vehicleInfo.findAll({
       where: {
-        vehicleNumber: vehicleNumber
-      }
+        vehicleNumber: vehicleNumber,
+        userId: {
+          [Op.notIn] : [id]
+        },
+      },
     })
-    if (vehicleNumberExisted) {
+    
+    console.log(vehicleNumberExisted)
+    if (vehicleNumberExisted.length > 0) {
       return res.status(RESPONSE.HTTP_STATUS_CODES.CONFLICT).json({
         message :`Vehicle Number is ${RESPONSE.MESSAGES.CONFLIT.USER_ALREADY_EXISTED}`
       })
     }
+    
 
     // Update the existing vehicle information
     await existingVehicleInfo.update({

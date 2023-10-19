@@ -7,11 +7,25 @@ import { generateToken } from '../../middleware/userAuth.js'
 // registration api
 const registration = async (req, res) => {
   try {
+    
     // getting data from body
     const { fName, lName, email, gmail_id, password, role } = req.body
-    const image = req.file.originalname // profile picture upload
-    console.log(image)
-      
+    
+    // image upload with multer
+    const path = req.file.path
+    const splitCheckType = path.split('/')
+    
+    let imageUploadWithPath = []
+    
+    for (let getIndex = 0; getIndex < splitCheckType.length; getIndex++) {
+      if (getIndex === 4 || getIndex === 3 || getIndex === 2 || getIndex === 1 || getIndex === 0) {
+        continue
+      }
+      imageUploadWithPath.push(splitCheckType[getIndex])
+    }    
+    
+    const joinWithSlash = imageUploadWithPath.join('/')
+
     //find email or gmail_id
     const ifExistingUser = await User.findOne({
       where: {
@@ -45,7 +59,7 @@ const registration = async (req, res) => {
       gmail_id: '',
       password: hashPassword,
       role,
-      image: image
+      image: joinWithSlash
     }
 
     if (gmail_id) {
