@@ -9,21 +9,24 @@ const registration = async (req, res) => {
   try {
     // getting data from body
     const { fName, lName, email, gmail_id, password, role } = req.body
-
-    //find email or gmail_id 
+    const image = req.file.originalname // profile picture upload
+    console.log(image)
+      
+    //find email or gmail_id
     const ifExistingUser = await User.findOne({
       where: {
         [Sequelize.Op.or]: [
-          { email }, {
+          { email },
+          {
             [Sequelize.Op.and]: [
               { gmail_id: { [Sequelize.Op.not]: '' } },
-              { gmail_id }
+              { gmail_id }, 
             ],
           },
         ],
       },
-    }) 
- 
+    })
+
     // check condition user is exist or not
     if (ifExistingUser) {
       return res
@@ -42,26 +45,26 @@ const registration = async (req, res) => {
       gmail_id: '',
       password: hashPassword,
       role,
+      image: image
     }
 
     if (gmail_id) {
       userObj.gmail_id = gmail_id
     }
 
-    // create user in database 
+    // create user in database
     const user = await User.create(userObj)
 
     // generate user token
     const token = generateToken(user)
-    res
-      .status(RESPONSE.HTTP_STATUS_CODES.CREATED)
-      .json({ 
-        MESSAGES: RESPONSE.MESSAGES.USER_CREATED,
-        UserId: user,
-        token: token,
-      })
+    
+    res.status(RESPONSE.HTTP_STATUS_CODES.CREATED).json({
+      MESSAGES: RESPONSE.MESSAGES.USER_CREATED,
+      UserId: user,
+      token: token,
+    })
   } catch (error) {
-    console.log(error) 
+    console.log(error)
     res
       .status(RESPONSE.HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR)
       .json({ MESSAGES: RESPONSE.MESSAGES.INTERNAL_SERVER_ERROR })
@@ -73,22 +76,24 @@ const login = async (req, res) => {
   try {
     // getting data from body
     const { type, email, gmail_id, password } = req.body
-    console.log(email, gmail_id)  
-    
+    console.log(email, gmail_id)
+
     const ifCheck = await User.findAll({
       where: {
         block: 1,
         ...(email && { email: email }),
-        ...(gmail_id && { gmail_id: gmail_id })
-      }
+        ...(gmail_id && { gmail_id: gmail_id }),
+      },
     })
     console.log(typeof ifCheck)
-    
+
     // check user block or not
     if (ifCheck.length >= 1) {
-      return res.status(RESPONSE.HTTP_STATUS_CODES.BAD_REQUEST).json({ MESSAGES : RESPONSE.MESSAGES.BAD_REQUEST })
+      return res
+        .status(RESPONSE.HTTP_STATUS_CODES.BAD_REQUEST)
+        .json({ MESSAGES: RESPONSE.MESSAGES.BAD_REQUEST })
     }
-    
+
     let user
     // type check email or gmail_id
     if (type === 'email') {
@@ -96,7 +101,7 @@ const login = async (req, res) => {
     } else if (type === 'gmail_id') {
       user = await User.findOne({ where: { gmail_id } })
     } else {
-      return res  
+      return res
         .status(RESPONSE.HTTP_STATUS_CODES.BAD_REQUEST)
         .json({ MESSAGES: RESPONSE.MESSAGES.INVALID_LOGIN_TYPE })
     }
@@ -108,17 +113,17 @@ const login = async (req, res) => {
         .json({ MESSAGES: RESPONSE.MESSAGES.UNAUTHORIZED_USER })
     }
 
-    // bcrypt matching like (password === user.password) 
+    // bcrypt matching like (password === user.password)
     const passwordMatch = await bcrypt.compare(password, user.password)
 
     // bcrypt password match to (password === user.password) pass message
-    if (passwordMatch) { 
+    if (passwordMatch) {
       const token = generateToken(user)
       res.status(RESPONSE.HTTP_STATUS_CODES.OK).json({
         MESSAGES: RESPONSE.MESSAGES.OK,
         user: user,
         token: token,
-      }) 
+      })
     } else {
       return res
         .status(RESPONSE.HTTP_STATUS_CODES.UNAUTHORIZED)

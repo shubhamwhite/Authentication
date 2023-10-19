@@ -17,12 +17,13 @@ import {
 } from '../controller/index.js'
 
 import express from 'express'
+import { upload } from '../middleware/imageUploader.js'
 import { verifyToken } from '../middleware/userAuth.js'
 
 const router = express.Router() 
  
 // registration and loin route 
-router.route('/user/sign-up').post(registration) 
+router.route('/user/sign-up').post(upload.single('image'),registration) 
 router.route('/user/sign-in').post(verifyToken,login) 
 
 // vehicle information, delete, update, notification, request api route

@@ -52,6 +52,10 @@ const User = sequelize.define('User', {
   block : {
     type: DataTypes.TINYINT,
     allowNull: true
+  },
+  image:{
+    type: DataTypes.STRING,
+    allowNull: true
   }
 },{
   timestamps: false,

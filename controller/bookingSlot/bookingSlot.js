@@ -10,14 +10,14 @@ const slotInformation = async (req, res) => {
     
     const { id, startDate, endDate, city, source, destination, capacity } = req.body
 
+
     const ifCheck = await User.findAll({
       where: {
         block: 1,
         id : id
       }
     })
-    console.log(typeof ifCheck)
-    
+        
     // check user block or not
     if (ifCheck.length >= 1) {
       return res.status(RESPONSE.HTTP_STATUS_CODES.BAD_REQUEST).json({ MESSAGES : RESPONSE.MESSAGES.BAD_REQUEST })
@@ -86,9 +86,7 @@ const slotInformation = async (req, res) => {
       },
       order: [['capacity', 'ASC']],
     })
-    
-    // console.log(matchCityAndCapacity[0].User.dataValues.id) 
-    
+        
     // Find same location
     if (matchCityAndCapacity.length === 0) {
       return res.status(
@@ -136,6 +134,7 @@ const slotInformation = async (req, res) => {
       vehicleNumber: result.vehicleNumber,
       capacity: result.capacity,
       city: result.city,
+      image: result.image,
     }))
 
     const userCreated = {
