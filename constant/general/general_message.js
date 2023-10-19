@@ -13,5 +13,5 @@ export default {
     BLOCK : 1,
     UNBLOCK : 0
     
-  }
+  },
 } 
