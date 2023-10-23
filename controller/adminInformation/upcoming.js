@@ -1,3 +1,4 @@
+import ErrorHandler from '../../util/errorHandler.js'
 import RESPONSE from '../../constant/response.js'
 import { Sequelize } from 'sequelize'
 import SlotBooking from '../../models/slotBooking.js'
@@ -85,8 +86,7 @@ const upcoming = async (req, res) => {
        
   } catch (err) {
     console.log(err)
-    return res.status(RESPONSE.HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({ MESSAGE : RESPONSE.MESSAGES.INTERNAL_SERVER_ERROR 
-    })
+    ErrorHandler.handleServerError(err,res)
   }
   
 }

@@ -1,3 +1,4 @@
+import ErrorHandler from '../../util/errorHandler.js'
 import RESPONSE from '../../constant/response.js'
 import User from '../../models/user.js'
 
@@ -62,8 +63,8 @@ const blockUser = async (req,res) => {
     }
     
   } catch (err) {
-    console.log(err) 
-    return res.status(RESPONSE.HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({ MESSAGE : RESPONSE.MESSAGES.INTERNAL_SERVER_ERROR })
+    console.error(err)
+    ErrorHandler.handleServerError(err,res)
   }
 } 
 

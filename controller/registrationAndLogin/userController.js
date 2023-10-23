@@ -1,42 +1,45 @@
+import ErrorHandler from '../../util/errorHandler.js'
 import RESPONSE from '../../constant/response.js'
 import Sequelize from 'sequelize'
 import User from '../../models/user.js'
 import bcrypt from 'bcrypt'
 import { generateToken } from '../../middleware/userAuth.js'
-
 // registration api
 const registration = async (req, res) => {
   try {
-    
     // getting data from body
     const { fName, lName, email, gmail_id, password, role } = req.body
-    
+
     // image upload with multer
     const path = req.file.path
     const splitCheckType = path.split('/')
-    
+
     let imageUploadWithPath = []
-    
+
     for (let getIndex = 0; getIndex < splitCheckType.length; getIndex++) {
-      if (getIndex === 4 || getIndex === 3 || getIndex === 2 || getIndex === 1 || getIndex === 0) {
+      if (
+        getIndex === 4 ||
+        getIndex === 3 ||
+        getIndex === 2 ||
+        getIndex === 1 ||
+        getIndex === 0
+      ) {
         continue
       }
       imageUploadWithPath.push(splitCheckType[getIndex])
-    }    
+    } 
     
-    const joinWithSlash = imageUploadWithPath.join('/')
-
     //find email or gmail_id
     const ifExistingUser = await User.findOne({
       where: {
-        [Sequelize.Op.or]: [
+        [Sequelize.Op.or]: [ 
           { email },
           {
             [Sequelize.Op.and]: [
               { gmail_id: { [Sequelize.Op.not]: '' } },
-              { gmail_id }, 
+              { gmail_id },
             ],
-          },
+          }, 
         ],
       },
     })
@@ -59,7 +62,6 @@ const registration = async (req, res) => {
       gmail_id: '',
       password: hashPassword,
       role,
-      image: joinWithSlash
     }
 
     if (gmail_id) {
@@ -67,21 +69,27 @@ const registration = async (req, res) => {
     }
 
     // create user in database
-    const user = await User.create(userObj)
-
+    const user = await User.create(userObj)  
+    
+    // logic is inserted id in between image name
+    imageUploadWithPath.splice(2,1,`${user.id}-${'profile_picture'}-${imageUploadWithPath[2]}`) // array in middle of putting
+    const joinWithSlash = imageUploadWithPath.join('/')
+    user.image = joinWithSlash // insert in user table #field name is image
+    
+    await user.save()
+    
     // generate user token
     const token = generateToken(user)
-    
+
     res.status(RESPONSE.HTTP_STATUS_CODES.CREATED).json({
       MESSAGES: RESPONSE.MESSAGES.USER_CREATED,
-      UserId: user,
+      DATA: user,
       token: token,
     })
+    
   } catch (error) {
-    console.log(error)
-    res
-      .status(RESPONSE.HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR)
-      .json({ MESSAGES: RESPONSE.MESSAGES.INTERNAL_SERVER_ERROR })
+    console.error(error)
+    ErrorHandler.handleServerError(error,res)
   }
 }
 
@@ -145,7 +153,7 @@ const login = async (req, res) => {
     }
   } catch (error) {
     console.error(error)
-    res.status(500).json({ MESSAGES: RESPONSE.MESSAGES.INTERNAL_SERVER_ERROR })
+    ErrorHandler.handleServerError(error,res)
   }
 }
 

@@ -17,7 +17,7 @@ import {
 } from '../controller/index.js'
 
 import express from 'express'
-import { upload } from '../middleware/imageUploader.js'
+import { upload } from '../helper/imageUploadService/imageUploader.js'
 import { verifyToken } from '../middleware/userAuth.js'
 
 const router = express.Router() 

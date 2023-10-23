@@ -1,3 +1,4 @@
+import ErrorHandler from '../../util/errorHandler.js'
 import RESPONSE from '../../constant/response.js'
 import User from '../../models/user.js'
 import slotBooking from '../../models/slotBooking.js'
@@ -49,7 +50,7 @@ const deleteSlot = async (req, res) => {
     }
   } catch (err) {
     console.log(err)
-    res.status(RESPONSE.HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({ MESSAGE : RESPONSE.MESSAGES.INTERNAL_SERVER_ERROR })
+    ErrorHandler.handleServerError(err, res)
   }
 
 }

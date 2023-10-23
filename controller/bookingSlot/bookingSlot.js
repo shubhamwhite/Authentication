@@ -1,3 +1,4 @@
+import ErrorHandler from '../../util/errorHandler.js'
 import { Op } from 'sequelize'
 import RESPONSE from '../../constant/response.js'
 import User from '../../models/user.js'
@@ -158,9 +159,7 @@ const slotInformation = async (req, res) => {
     }
   } catch (err) {
     console.log(err)
-    return res
-      .status(RESPONSE.HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR)
-      .json({ MESSAGE: RESPONSE.MESSAGES.INTERNAL_SERVER_ERROR })
+    ErrorHandler.handleServerError(err, res)
   }
 }
 

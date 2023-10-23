@@ -6,7 +6,7 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 // Specify the path where uploaded files will be stored
-const uploadPath = path.join(__dirname, '..', 'public', 'profileImage')
+const uploadPath = path.join(__dirname, '..', '..','public', 'profile')
 
 // Configure Multer to specify where to store uploaded files and file name
 const storage = multer.diskStorage({

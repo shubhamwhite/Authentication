@@ -1,3 +1,4 @@
+import ErrorHandler from '../../util/errorHandler.js'
 // display all records booked or not
 import RESPONSE from '../../constant/response.js'
 import SlotBooking from '../../models/slotBooking.js'
@@ -81,9 +82,7 @@ const displayAll = async (req, res) => {
   
   } catch (err) {
     console.log(err)
-    return res.status(RESPONSE.HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({
-      MESSAGE : RESPONSE.MESSAGES.INTERNAL_SERVER_ERROR 
-    })
+    ErrorHandler.handleServerError(err,res)
   }
 }
 
