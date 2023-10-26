@@ -1,9 +1,11 @@
+import { generateTokenLogin, generateTokenRegistration } from '../../helper/jwt/jwt_create.helper.js'
+
 import ErrorHandler from '../../util/errorHandler.js'
 import RESPONSE from '../../constant/response.js'
 import Sequelize from 'sequelize'
 import User from '../../models/user.js'
 import bcrypt from 'bcrypt'
-import { generateToken } from '../../middleware/userAuth.js'
+
 // registration api
 const registration = async (req, res) => {
   try {
@@ -79,8 +81,8 @@ const registration = async (req, res) => {
     await user.save()
     
     // generate user token
-    const token = generateToken(user)
-
+    const token = generateTokenRegistration(user)
+    
     res.status(RESPONSE.HTTP_STATUS_CODES.CREATED).json({
       MESSAGES: RESPONSE.MESSAGES.USER_CREATED,
       DATA: user,
@@ -98,7 +100,6 @@ const login = async (req, res) => {
   try {
     // getting data from body
     const { type, email, gmail_id, password } = req.body
-    console.log(email, gmail_id)
 
     const ifCheck = await User.findAll({
       where: {
@@ -107,7 +108,6 @@ const login = async (req, res) => {
         ...(gmail_id && { gmail_id: gmail_id }),
       },
     })
-    console.log(typeof ifCheck)
 
     // check user block or not
     if (ifCheck.length >= 1) {
@@ -140,12 +140,15 @@ const login = async (req, res) => {
 
     // bcrypt password match to (password === user.password) pass message
     if (passwordMatch) {
-      const token = generateToken(user)
+      const token = generateTokenLogin(user)
       res.status(RESPONSE.HTTP_STATUS_CODES.OK).json({
         MESSAGES: RESPONSE.MESSAGES.OK,
         user: user,
         token: token,
       })
+      
+      console.log('user id is',user.id)
+      
     } else {
       return res
         .status(RESPONSE.HTTP_STATUS_CODES.UNAUTHORIZED)

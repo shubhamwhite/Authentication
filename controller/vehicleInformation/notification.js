@@ -2,7 +2,7 @@
 import RESPONSE from '../../constant/response.js'
 import SlotBooking from '../../models/slotBooking.js'
 import User from '../../models/user.js'
-import currentDateFormate from '../../helper/current.js'
+import currentDateFormate from '../../helper/dateAndTime/current_dateAndTime.helper.js'
 
 // Notification API
 const notification = async (req, res) => {
@@ -29,9 +29,9 @@ const notification = async (req, res) => {
         driverId: id,
       },
     })
-
+ 
     if (checkBookTableExistedOr <= 0) {
-      return res
+      return res 
         .status(RESPONSE.HTTP_STATUS_CODES.NOT_FOUND)
         .json({ MESSAGE: RESPONSE.DRIVER_CODE.driverResponse.DRIVER_CODE.NOT_ANY_REQUEST })
     }
@@ -42,14 +42,15 @@ const notification = async (req, res) => {
         model: User,
         attributes: [['id','user_id'], 'fName', 'lName', 'email', 'role'],
       },
-      where: {
-        driverId: id,
-      },
+      where: { 
+        driverId: id, 
+      },  
       attributes: [['id','booking_id'],'startDate','endDate', 'city', 'capacity', 'status']
     })  
 
-    //   2023-10-15 09:46 AM                                     2023-10-18 17:17 PM
-    if ((checkBookTableExistedOr[0].dataValues.pickupDateTime) < currentDateFormate) {
+    // if less than date about present date 
+    //   2023-10-15 09:46 AM                             2023-10-18 17:17 PM
+    if ((checkBookTableExistedOr[0].dataValues.endDate) < currentDateFormate) {
       return res.status(RESPONSE.HTTP_STATUS_CODES.NOT_FOUND).json({ 
         MESSAGE : RESPONSE.DRIVER_CODE.driverResponse.DRIVER_CODE.OUTDATED
       })

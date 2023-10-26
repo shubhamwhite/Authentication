@@ -1,5 +1,4 @@
 import dotenv from 'dotenv'
-// using jwt token verification
 import jwt from 'jsonwebtoken'
 import response from '../constant/response.js'
 
@@ -8,11 +7,6 @@ dotenv.config()
 // Your secret key for JWT
 const secretKey = process.env.JWT_SECRET
 
-// Middleware to generate a JWT token
-const generateToken = (user) => {
-  return jwt.sign({ userId: user.id }, secretKey, { expiresIn: '23h' }) 
-}
- 
 // Middleware to verify JWT token
 const verifyToken = (req, res, next) => { 
   
@@ -24,13 +18,16 @@ const verifyToken = (req, res, next) => {
     return res.status(response.HTTP_STATUS_CODES.UNAUTHORIZED).json({ message: response.MESSAGES.UNAUTHORIZED_USER })
   }
   try {
-    const decoded = jwt.verify(tokenOne, secretKey)
+    
+    const decoded = jwt.verify(tokenOne, secretKey)    
     req.userId = decoded.userId
+    console.log('middleware',req.userId)
     next()
+    
   } catch (error) { 
     console.log(error)
     return res.status(response.HTTP_STATUS_CODES.FORBIDDEN).json({ message: response.MESSAGES.FORBIDDEN })
   }
 }
 
-export { generateToken, verifyToken }
+export { verifyToken }

@@ -3,12 +3,11 @@ import RESPONSE from '../../constant/response.js'
 import SlotBooking from '../../models/slotBooking.js'
 import User from '../../models/user.js'
 import VehicleInformation from '../../models/vehicleInfo.js'
-import isDateTimeValid from '../../helper/pickupDate.js'
+import isDateTimeValid from '../../helper/dateAndTime/date_format.helper.js'
 
 const updateSlot = async (req, res) => {
   
   try {
-    
     const { id, startDate, endDate, city, source, destination, capacity } = req.body
 
     const ifCheck = await User.findAll({
@@ -45,9 +44,11 @@ const updateSlot = async (req, res) => {
 
     // Check start date is valid or not (function)
     if (!isDateTimeValid(startDate)) {
+      console.log('hi')
       return res
         .status(RESPONSE.HTTP_STATUS_CODES.FORBIDDEN)
-        .json({ MESSAGE: RESPONSE.MESSAGES.FORBIDDEN })
+        .json({ MESSAGE: RESPONSE.MESSAGES.FORBIDDEN,
+          ERR: 'start date format is not valid' })
     }
 
     // Check end date is valid or not (function)
@@ -55,14 +56,14 @@ const updateSlot = async (req, res) => {
       return res
         .status(RESPONSE.HTTP_STATUS_CODES.FORBIDDEN)
         .json({ MESSAGE: RESPONSE.MESSAGES.FORBIDDEN, 
-          addtional: 'end date format is not valid' })
+          ERR: 'end date format is not valid' })
     }
     
-    // StartDate is greater then about endDate 
-    if (startDate > endDate) {
+    // StartDate is greater then about endDate  
+    if (startDate >= endDate) {
       return res.status(400).json({ message: 'greater then error' })
     }
-    
+     
 
     // Match data for vehicle information to user create area
     const matchCityAndCapacity = await VehicleInformation.findAll({
@@ -139,8 +140,8 @@ const updateSlot = async (req, res) => {
 
     const userUpdate = {
       userId: id,
-      startDate,
-      endDate,
+      startDate: isDateTimeValid(startDate),
+      endDate: isDateTimeValid(endDate),
       city,
       source,
       destination,

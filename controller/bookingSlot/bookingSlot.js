@@ -3,14 +3,13 @@ import { Op } from 'sequelize'
 import RESPONSE from '../../constant/response.js'
 import User from '../../models/user.js'
 import bookingSlotTable from '../../models/slotBooking.js'
-import isDateTimeValid from '../../helper/pickupDate.js'
+import isDateTimeValid from '../../helper/dateAndTime/date_format.helper.js'
 import vehicleinfoTable from '../../models/vehicleInfo.js'
 
 const slotInformation = async (req, res) => {
   try {
     
     const { id, startDate, endDate, city, source, destination, capacity } = req.body
-
 
     const ifCheck = await User.findAll({
       where: {
@@ -63,7 +62,7 @@ const slotInformation = async (req, res) => {
     }
 
     // startDate is greater then about endDate
-    if (startDate >= endDate) {
+    if (startDate > endDate) {
       return res.status(400).json({ message: 'greater then error' })
     }
 
@@ -140,8 +139,8 @@ const slotInformation = async (req, res) => {
 
     const userCreated = {
       userId: id,
-      startDate,
-      endDate,
+      startDate: isDateTimeValid(startDate),
+      endDate: isDateTimeValid(endDate),
       city,
       source,
       destination,
