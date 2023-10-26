@@ -16,3 +16,7 @@ test
  
 # vscode folder
 .vscode
+
+# docker 
+.dockerignore
+Dockerfile
