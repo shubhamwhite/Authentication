@@ -13,7 +13,7 @@ const verifyTokenBody = (req, res, next) => {
   const token = req.body.token
 
   if (!token) { 
-    return res.status(response.HTTP_STATUS_CODES.UNAUTHORIZED).json({ message: response.MESSAGES.UNAUTHORIZED_USER })
+    return res.status(response.HTTP_STATUS_CODES.UNAUTHORIZED).json({ message: response.MESSAGES.UNAUTHORIZED_USER, ERR : 'user is unauthorized using token' })
   }
   try {
     const decoded = jwt.verify(token, secretKey)    
@@ -23,7 +23,7 @@ const verifyTokenBody = (req, res, next) => {
     
   } catch (error) { 
     console.log(error)
-    return res.status(response.HTTP_STATUS_CODES.FORBIDDEN).json({ message: response.MESSAGES.FORBIDDEN })
+    return res.status(response.HTTP_STATUS_CODES.FORBIDDEN).json({ message: response.MESSAGES.FORBIDDEN, ERR : 'invalid token format' })
   }
 }
 

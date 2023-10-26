@@ -10,7 +10,7 @@ const generateTokenRegistration = (user) => {
 }
 
 const generateTokenLogin = (user) => { 
-  return jwt.sign({ userId: user.id }, secretKey, { expiresIn: '1h' }) 
+  return jwt.sign({ userId: user.id }, secretKey, { expiresIn: '1m' }) 
 }
 
 export { generateTokenRegistration, generateTokenLogin }

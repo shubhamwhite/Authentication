@@ -67,7 +67,7 @@ const notification = async (req, res) => {
 
     // Everything is ok then execute this code
     if (getFullInformation) {
-      return res
+      return res 
         .status(RESPONSE.HTTP_STATUS_CODES.OK)
         .json({ 
           MESSAGE: RESPONSE.MESSAGES.OK, 
