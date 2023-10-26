@@ -18,7 +18,7 @@ import {
 
 import express from 'express'
 import { upload } from '../helper/imageUploadService/imageUploader.js'
-// import { verifyToken } from '../middleware/userAuth.middleware.js'
+// import { verifyToken } from '../middleware/userAuth.middleware.js' // using authentication 
 import { verifyTokenBody } from '../middleware/userAuthBody.middleware.js'
 
 const router = express.Router() 
@@ -37,8 +37,8 @@ router.route('/action/request').post(actionRequest)
 // user information, delete, update, status api route
 router.route('/slot/information').post(verifyTokenBody,slotInformation) 
 router.route('/slot/update').post(verifyTokenBody,updateSlot)
-router.route('/slot/delete').post(deleteSlot)
-router.route('/list/status').post(status) 
+router.route('/slot/delete').post(verifyTokenBody,deleteSlot)
+router.route('/list/status').post(verifyTokenBody,status) 
 
 // admin display, previous, upcoming api route
 router.route('/display-all/records').post(displayAll)
