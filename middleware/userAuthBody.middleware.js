@@ -13,10 +13,11 @@ const verifyTokenBody = (req, res, next) => {
   const token = req.body.token
   const id = req.body.id
   const ifOfNumber = Number(id)
+  console.log(token)
   // console.log(typeof ifOfNumber)
 
-  if (!token) { 
-    return res.status(response.HTTP_STATUS_CODES.UNAUTHORIZED).json({ message: response.MESSAGES.UNAUTHORIZED_USER, ERR : 'user is unauthorized using token' })
+  if (token === undefined) { 
+    return res.status(response.HTTP_STATUS_CODES.UNAUTHORIZED).json({ message: response.MESSAGES.UNAUTHORIZED_USER, TOKEN_ERR : 'user is unauthorized without using token' })
   } 
   try {
     const decoded = jwt.verify(token, secretKey)    
@@ -28,7 +29,7 @@ const verifyTokenBody = (req, res, next) => {
     next()
   } catch (error) { 
     console.log(error)
-    return res.status(response.HTTP_STATUS_CODES.FORBIDDEN).json({ message: response.MESSAGES.FORBIDDEN, ERR : 'invalid token format' })
+    return res.status(response.HTTP_STATUS_CODES.FORBIDDEN).json({ message: response.MESSAGES.FORBIDDEN, TOKEN_ERR : 'invalid token' })
   }
 }
 

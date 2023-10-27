@@ -21,15 +21,15 @@ app.use('/api/v1',router)
   
 // sync database   
 User.sync({ force: false })      
-vehicleInformation.sync({ force :  false })      
+vehicleInformation.sync({ force :  false })   
 slotBooking.sync({ force: false })
     
 // create server 
 app.listen(PORT,(err) => { 
   checkDBConnection() 
   if (err) {
-    console.log(color.bgRed(` server not run on ${PORT} port number `),err)
+    console.log(color.red(` server not run on ${PORT} port number `),err)
   } else {
-    console.log(color.black.bgGreen(` server run on ${PORT} port number `))
+    console.log(color.blue(` server run on ${PORT} port number`))
   } 
 })    

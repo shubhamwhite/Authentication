@@ -1,4 +1,7 @@
-import { generateTokenLogin, generateTokenRegistration } from '../../helper/jwt/jwt_create.helper.js'
+import {
+  generateTokenLogin,
+  generateTokenRegistration,
+} from '../../helper/jwt/jwt_create.helper.js'
 
 import ErrorHandler from '../../util/errorHandler.js'
 import RESPONSE from '../../constant/response.js'
@@ -10,38 +13,78 @@ import bcrypt from 'bcrypt'
 const registration = async (req, res) => {
   try {
     // getting data from body
-    const { fName, lName, email, gmail_id, password, role } = req.body
-
-    // image upload with multer
-    const path = req.file.path
-    const splitCheckType = path.split('/')
-
-    let imageUploadWithPath = []
-
-    for (let getIndex = 0; getIndex < splitCheckType.length; getIndex++) {
-      if (
-        getIndex === 4 ||
-        getIndex === 3 ||
-        getIndex === 2 ||
-        getIndex === 1 ||
-        getIndex === 0
-      ) {
-        continue
-      }
-      imageUploadWithPath.push(splitCheckType[getIndex])
-    } 
+    const { fName, lName, email, gmail_id, password, role, edit } = req.body
+    const editNumber = Number(edit)
+    const path = req.file.path // image upload with multer
     
+
+    // This function is only insert 'id' in image name format
+    const insertIdInUrl = (path_URL) => {
+      const format = path_URL
+      const id = user.id 
+      const regexPattern = /\/(\d+)-/
+      const formattedString = format.replace(regexPattern, `/${id}-profile-pic-$1-`)
+      console.log(formattedString)
+      return formattedString
+    }
+
+    // ############### image upload functionality ########################################################
+    let URL_ARRAY = []
+    const uploadImage = (getPath) => {
+      const splitURL = getPath.split('/')
+      for (let getIndex = 0; getIndex < splitURL.length; getIndex++) {
+        if (
+          getIndex === 4 ||
+          getIndex === 3 ||
+          getIndex === 2 || 
+          getIndex === 1 ||
+          getIndex === 0
+        ) {
+          continue
+        }
+        const splitedURL = splitURL[getIndex]
+        URL_ARRAY.push(splitedURL)
+      }
+      const ARRAY_URL_GET = URL_ARRAY
+      const ARRAY_JOIN = ARRAY_URL_GET.join('/')
+      return ARRAY_JOIN
+    }
+    // console.log(uploadImage(path))
+    const path_URL = uploadImage(path)
+    
+    // ############# edit image upload functionality ######################################################
+    if (editNumber === 1) {
+      const findId = await User.findOne({
+        where: {
+          gmail_id: req.body.gmail_id, 
+        },
+      })
+      
+      /** update image **/
+      const editImage = await User.update({
+        image: path_URL
+      }, {
+        where:{
+          id: findId.id,
+        } 
+      }
+      )
+      return res.status(400).json({ MESSAGE: 'success upload profile image' })
+    }
+    
+    //  ####################### end work ###################################################################
+
     //find email or gmail_id
     const ifExistingUser = await User.findOne({
       where: {
-        [Sequelize.Op.or]: [ 
+        [Sequelize.Op.or]: [
           { email },
           {
             [Sequelize.Op.and]: [
               { gmail_id: { [Sequelize.Op.not]: '' } },
               { gmail_id },
             ],
-          }, 
+          },
         ],
       },
     })
@@ -55,7 +98,7 @@ const registration = async (req, res) => {
 
     // password hashing
     const hashPassword = await bcrypt.hash(password, 10)
-
+    
     // Create a user object without gmail_id if it's not provided
     const userObj = {
       fName,
@@ -71,27 +114,24 @@ const registration = async (req, res) => {
     }
 
     // create user in database
-    const user = await User.create(userObj)  
-    
-    // logic is inserted id in between image name
-    imageUploadWithPath.splice(2,1,`${user.id}-${'profile_picture'}-${imageUploadWithPath[2]}`) // array in middle of putting
-    const joinWithSlash = imageUploadWithPath.join('/')
-    user.image = joinWithSlash // insert in user table #field name is image
+    const user = await User.create(userObj)
+ 
+    // call format function 
+    user.image = insertIdInUrl(path_URL)
     
     await user.save()
     
     // generate user token
     const token = generateTokenRegistration(user)
-    
+
     res.status(RESPONSE.HTTP_STATUS_CODES.CREATED).json({
       MESSAGES: RESPONSE.MESSAGES.USER_CREATED,
       DATA: user,
       token: token,
     })
-    
   } catch (error) {
     console.error(error)
-    ErrorHandler.handleServerError(error,res)
+    ErrorHandler.handleServerError(error, res)
   }
 }
 
@@ -146,9 +186,8 @@ const login = async (req, res) => {
         user: user,
         token: token,
       })
-      
-      console.log('user id is',user.id)
-      
+
+      console.log('user id is', user.id)
     } else {
       return res
         .status(RESPONSE.HTTP_STATUS_CODES.UNAUTHORIZED)
@@ -156,7 +195,7 @@ const login = async (req, res) => {
     }
   } catch (error) {
     console.error(error)
-    ErrorHandler.handleServerError(error,res)
+    ErrorHandler.handleServerError(error, res)
   }
 }
 

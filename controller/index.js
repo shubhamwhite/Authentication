@@ -29,5 +29,5 @@ export {
   displayAll,
   previous,
   upcoming,
-  blockUser
+  blockUser,
 }
