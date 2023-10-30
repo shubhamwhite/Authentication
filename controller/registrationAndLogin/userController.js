@@ -16,19 +16,22 @@ const registration = async (req, res) => {
     const { fName, lName, email, gmail_id, password, role, edit } = req.body
     const editNumber = Number(edit)
     const path = req.file.path // image upload with multer
-    
 
     // This function is only insert 'id' in image name format
+    let userid
+    let findIdIs
     const insertIdInUrl = (path_URL) => {
       const format = path_URL
-      const id = user.id 
+      const id = userid
+      const editId = findIdIs
       const regexPattern = /\/(\d+)-/
-      const formattedString = format.replace(regexPattern, `/${id}-profile-pic-$1-`)
-      console.log(formattedString)
+      const formattedString = format.replace(
+        regexPattern,
+        `/${id || editId}-profile-pic-$1-`
+      )
       return formattedString
     }
 
-    // ############### image upload functionality ########################################################
     let URL_ARRAY = []
     const uploadImage = (getPath) => {
       const splitURL = getPath.split('/')
@@ -36,7 +39,7 @@ const registration = async (req, res) => {
         if (
           getIndex === 4 ||
           getIndex === 3 ||
-          getIndex === 2 || 
+          getIndex === 2 ||
           getIndex === 1 ||
           getIndex === 0
         ) {
@@ -49,30 +52,29 @@ const registration = async (req, res) => {
       const ARRAY_JOIN = ARRAY_URL_GET.join('/')
       return ARRAY_JOIN
     }
-    // console.log(uploadImage(path))
     const path_URL = uploadImage(path)
-    
-    // ############# edit image upload functionality ######################################################
+
     if (editNumber === 1) {
       const findId = await User.findOne({
         where: {
-          gmail_id: req.body.gmail_id, 
+          gmail_id: req.body.gmail_id,
         },
       })
-      
-      /** update image **/
-      const editImage = await User.update({
-        image: path_URL
-      }, {
-        where:{
-          id: findId.id,
-        } 
-      }
+      findIdIs = findId.id
+
+      await User.update(
+        {
+          image: insertIdInUrl(path_URL),
+        },
+        {
+          where: {
+            id: findId.id,
+          },
+        }
       )
+
       return res.status(400).json({ MESSAGE: 'success upload profile image' })
     }
-    
-    //  ####################### end work ###################################################################
 
     //find email or gmail_id
     const ifExistingUser = await User.findOne({
@@ -98,7 +100,7 @@ const registration = async (req, res) => {
 
     // password hashing
     const hashPassword = await bcrypt.hash(password, 10)
-    
+
     // Create a user object without gmail_id if it's not provided
     const userObj = {
       fName,
@@ -115,12 +117,13 @@ const registration = async (req, res) => {
 
     // create user in database
     const user = await User.create(userObj)
- 
-    // call format function 
+    userid = user.id
+
+    // call format function
     user.image = insertIdInUrl(path_URL)
-    
+
     await user.save()
-    
+
     // generate user token
     const token = generateTokenRegistration(user)
 
